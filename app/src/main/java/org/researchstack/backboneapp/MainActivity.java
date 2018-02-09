@@ -73,6 +73,8 @@ public class MainActivity extends PinCodeActivity
     private static final String FORM_NAME                 = "form_name";
     public static final  String SAMPLE_SURVEY             = "sample_survey";
 
+    public static final String SKIPPED_RESULT_VALUE = "[SKIPPED_RESULT]";
+
     // Views
     private AppCompatButton consentButton;
     private AppCompatButton surveyButton;
@@ -421,10 +423,19 @@ public class MainActivity extends PinCodeActivity
                 .loadLatestTaskResult(SAMPLE_SURVEY);
 
         String results = "";
+        String currentResult;
         for(String id : taskResult.getResults().keySet())
         {
             StepResult stepResult = taskResult.getStepResult(id);
-            results += id + ": " + stepResult.getResult().toString() + "\n";
+            if (stepResult.getResult() == null)
+            {
+                currentResult = SKIPPED_RESULT_VALUE;
+            }
+            else
+            {
+                currentResult = stepResult.getResult().toString();
+            }
+            results += id + ": " + currentResult + "\n";
         }
 
         surveyAnswer.setText(results);
