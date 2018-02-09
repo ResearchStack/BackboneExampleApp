@@ -3,7 +3,6 @@ package org.researchstack.backboneapp;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
@@ -20,9 +19,7 @@ import org.researchstack.backbone.answerformat.AnswerFormat;
 import org.researchstack.backbone.answerformat.BooleanAnswerFormat;
 import org.researchstack.backbone.answerformat.ChoiceAnswerFormat;
 import org.researchstack.backbone.answerformat.DateAnswerFormat;
-import org.researchstack.backbone.answerformat.IntegerAnswerFormat;
 import org.researchstack.backbone.answerformat.TextAnswerFormat;
-import org.researchstack.backbone.answerformat.UnknownAnswerFormat;
 import org.researchstack.backbone.model.Choice;
 import org.researchstack.backbone.model.ConsentDocument;
 import org.researchstack.backbone.model.ConsentSection;
@@ -41,7 +38,6 @@ import org.researchstack.backbone.ui.PinCodeActivity;
 import org.researchstack.backbone.ui.ViewTaskActivity;
 import org.researchstack.backbone.ui.step.layout.ConsentSignatureStepLayout;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 public class MainActivity extends PinCodeActivity
@@ -51,17 +47,9 @@ public class MainActivity extends PinCodeActivity
     private static final int REQUEST_SURVEY  = 1;
 
     // Task/Step Identifiers
-    public static final  String FORM_STEP                 = "form_step";
-    public static final  String AGE                       = "age";
     public static final  String INSTRUCTION               = "identifier";
-    public static final  String BASIC_INFO_HEADER         = "basic_info_header";
-    public static final  String FORM_AGE                  = "form_age";
-    public static final  String FORM_GENDER               = "gender";
-    public static final  String FORM_MULTI_CHOICE         = "multi_choice";
-    public static final  String FORM_DATE_OF_BIRTH        = "date_of_birth";
     public static final  String NUTRITION                 = "nutrition";
     public static final  String SIGNATURE                 = "signature";
-    public static final  String SIGNATURE_DATE            = "signature_date";
     public static final  String VISUAL_CONSENT_IDENTIFIER = "visual_consent_identifier";
     public static final  String CONSENT_DOC               = "consent_doc";
     public static final  String SIGNATURE_FORM_STEP       = "form_step";
@@ -69,8 +57,6 @@ public class MainActivity extends PinCodeActivity
     public static final  String CONSENT                   = "consent";
     public static final  String MULTI_STEP                = "multi_step";
     public static final  String DATE                      = "date";
-    public static final  String DECIMAL                   = "decimal";
-    private static final String FORM_NAME                 = "form_name";
     public static final  String SAMPLE_SURVEY             = "sample_survey";
 
     public static final String SKIPPED_RESULT_VALUE = "[SKIPPED_RESULT]";
@@ -362,49 +348,6 @@ public class MainActivity extends PinCodeActivity
         // Create an activity using the task and set a delegate.
         Intent intent = ViewTaskActivity.newIntent(this, task);
         startActivityForResult(intent, REQUEST_SURVEY);
-    }
-
-    @NonNull
-    private FormStep createFormStep()
-    {
-        FormStep formStep = new FormStep(FORM_STEP, "Form", "Form groups multi-entry in one page");
-        ArrayList<QuestionStep> formItems = new ArrayList<>();
-
-        QuestionStep basicInfoHeader = new QuestionStep(BASIC_INFO_HEADER,
-                "Basic Information",
-                new UnknownAnswerFormat());
-        formItems.add(basicInfoHeader);
-
-        TextAnswerFormat format = new TextAnswerFormat();
-        format.setIsMultipleLines(false);
-        QuestionStep nameItem = new QuestionStep(FORM_NAME, "Name", format);
-        formItems.add(nameItem);
-
-        QuestionStep ageItem = new QuestionStep(FORM_AGE, "Age", new IntegerAnswerFormat(18, 90));
-        formItems.add(ageItem);
-
-        AnswerFormat genderFormat = new ChoiceAnswerFormat(AnswerFormat.ChoiceAnswerStyle.SingleChoice,
-                new Choice<>("Male", 0),
-                new Choice<>("Female", 1));
-        QuestionStep genderFormItem = new QuestionStep(FORM_GENDER, "Gender", genderFormat);
-        formItems.add(genderFormItem);
-
-        AnswerFormat multiFormat = new ChoiceAnswerFormat(AnswerFormat.ChoiceAnswerStyle.MultipleChoice,
-                new Choice<>("Zero", 0),
-                new Choice<>("One", 1),
-                new Choice<>("Two", 2));
-        QuestionStep multiFormItem = new QuestionStep(FORM_MULTI_CHOICE, "Test Multi", multiFormat);
-        formItems.add(multiFormItem);
-
-        AnswerFormat dateOfBirthFormat = new DateAnswerFormat(AnswerFormat.DateAnswerStyle.Date);
-        QuestionStep dateOfBirthFormItem = new QuestionStep(FORM_DATE_OF_BIRTH,
-                "Birthdate",
-                dateOfBirthFormat);
-        formItems.add(dateOfBirthFormItem);
-
-        // ... And so on, adding additional items
-        formStep.setFormSteps(formItems);
-        return formStep;
     }
 
     private void processSurveyResult(TaskResult result)
