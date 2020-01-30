@@ -38,6 +38,7 @@ import org.researchstack.backbone.step.QuestionStep;
 import org.researchstack.backbone.task.OrderedTask;
 import org.researchstack.backbone.task.Task;
 import org.researchstack.backbone.ui.PinCodeActivity;
+import org.researchstack.backbone.interop.ViewBackboneInteropTaskActivity;
 import org.researchstack.backbone.ui.ViewTaskActivity;
 import org.researchstack.backbone.ui.step.layout.ConsentSignatureStepLayout;
 
@@ -275,8 +276,8 @@ public class MainActivity extends PinCodeActivity
                 formStep,
                 signatureStep);
 
-        // Launch using hte ViewTaskActivity and make sure to listen for the activity result
-        Intent intent = ViewTaskActivity.newIntent(this, consentTask);
+        // Launch using hte ViewBackboneInteropTaskActivity and make sure to listen for the activity result
+        Intent intent = ViewBackboneInteropTaskActivity.newIntent(this, consentTask);
         startActivityForResult(intent, REQUEST_CONSENT);
     }
 
@@ -358,7 +359,7 @@ public class MainActivity extends PinCodeActivity
                 booleanStep, multiStep);
 
         // Create an activity using the task and set a delegate.
-        Intent intent = ViewTaskActivity.newIntent(this, task);
+        Intent intent = ViewBackboneInteropTaskActivity.newIntent(this, task);
         startActivityForResult(intent, REQUEST_SURVEY);
     }
 
@@ -424,7 +425,10 @@ public class MainActivity extends PinCodeActivity
         for(String id : taskResult.getResults().keySet())
         {
             StepResult stepResult = taskResult.getStepResult(id);
-            results += id + ": " + stepResult.getResult().toString() + "\n";
+            // handle stepResults with null results
+            // we now add an empty stepResult to track step start/end timestamps for when a step
+            // does not add a result for itself
+            results += id + ": " + stepResult.getResult() + "\n";
         }
 
         surveyAnswer.setText(results);

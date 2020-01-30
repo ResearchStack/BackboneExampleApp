@@ -21,6 +21,7 @@ allprojects {
         jcenter()
         mavenCentral()
         maven { url "https://jitpack.io" } // for MPAndroidChart dependency, not on jcenter yet
+        maven { url "https://dl.bintray.com/researchstack/ResearchStack/" } // 2.0.0-alpha01 is not on jcenter yet
     }
 }
 
